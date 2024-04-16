@@ -1,6 +1,7 @@
 import {Router} from "express";
-import { registerUser } from "../controllers/user.controller.js";
+import { loginUser, logoutUser, registerUser } from "../controllers/user.controller.js";
 import {upload} from "../middlewares/multer.middleware.js";
+import { verifyJWT } from "../controllers/auth.middleware.js";
 const router = Router();
 
 router.route('/register').post(
@@ -15,4 +16,10 @@ router.route('/register').post(
         }
     ])
     ,registerUser)
+
+
+router.route('/login').post(loginUser)
+
+// secure section 
+router.route('/logout').post(verifyJWT,logoutUser) // BEACUASE verifyJWT returns user so it will available in next function
 export default router;
