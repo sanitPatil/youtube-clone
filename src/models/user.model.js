@@ -61,7 +61,7 @@ userSchema.methods.isPassowrdCorrect = async function(password){
 }
 
 userSchema.methods.generateAccessToken = function(){ // NO NEED FOR ASYNC AS IT FASTER WORK
-    jwt.sign({
+    return jwt.sign({
         _id:this._id,
         userName:this.userName,
         email:this.email,
@@ -69,14 +69,14 @@ userSchema.methods.generateAccessToken = function(){ // NO NEED FOR ASYNC AS IT 
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-        expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+        expiresIn:process.env.ACCESS_TOKEN_EXPIRY 
     }
 )
 }
 
 
 userSchema.methods.generateRefreshToken = function(){ // NO NEED FOR ASYNC AS IT FASTER WORK
-    jwt.sign({ 
+    return jwt.sign({ 
         _id:this._id,  // THIS IS PAYLOAD - PAYLOAD NOTHING BUT DATA
     },
     process.env.REFRESH_TOKEN_SECRET, // REFRESH TOKEN SECRET 
