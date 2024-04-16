@@ -10,10 +10,10 @@ const PORT = process.env.PORT || 8000;
 
 connectDB()
 .then(()=>{
-    // app.on("Error",()=>{
-    //     console.log(`APP FAILED!!! TERMINATING PROJECT.`);
-    //     process.exit(1);
-    // })
+    app.on("Error",()=>{
+        console.log(`APP FAILED!!! TERMINATING PROJECT.`);
+        process.exit(1);
+    })
     app.listen(PORT, ()=>{
         console.log(`RUNNING SUCCESSFULLY ON PORT ${PORT}`);
     })

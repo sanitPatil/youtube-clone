@@ -31,7 +31,7 @@ const userSchema = new Schema({
         required:true
     },
     coverImage:{
-        type:true,
+        type:String,
     },
     password:{
         type:String,
@@ -43,7 +43,7 @@ const userSchema = new Schema({
     watchHistory:[
         {
         type:Schema.Types.ObjectId,
-        ref:Video
+        ref:"Video"
         }
     ]
 },{timestamps:true});
