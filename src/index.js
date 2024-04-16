@@ -6,15 +6,16 @@ dotenv.config({
     path:'./.env'
 })
 
-app
+const PORT = process.env.PORT || 8000;
+
 connectDB()
 .then(()=>{
-    app.on("Error",()=>{
-        console.log(`APP FAILED!!! TERMINATING PROJECT.`);
-        process.exit(1);
-    })
-    app.listen(process.env.PORT || 8000, ()=>{
-        console.log(`RUNNING SUCCESSFULLY ON PORT ${process.env.PORT}`);
+    // app.on("Error",()=>{
+    //     console.log(`APP FAILED!!! TERMINATING PROJECT.`);
+    //     process.exit(1);
+    // })
+    app.listen(PORT, ()=>{
+        console.log(`RUNNING SUCCESSFULLY ON PORT ${PORT}`);
     })
 
 })
