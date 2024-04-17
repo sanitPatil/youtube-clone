@@ -133,8 +133,8 @@ const logoutUser = asyncHandler(async (req,res)=>{
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken:undefined
+            $unset: {
+                refreshToken: 1 // {this will unset the particular field}           undefinedwork fine
             }
         },
         {
@@ -195,17 +195,18 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
 const changedPassword = asyncHandler(async (req,res)=>{
 
     const {oldPassword,newPassword} = req.body;
-
+    //console.log(oldPassword,newPassword)
     const user = await User.findById(req.user?._id);
-
-    const isPassowrdCorrect = await user.isPassowrdCorrect(oldPassword)
-
-    if(!isPassowrdCorrect){
+    //console.log(user);
+    
+    const isPasswordCorrect = await user.isPasswordCorrect(String(oldPassword))
+    // console.log(isPassowrdCorrect);
+    if(!isPasswordCorrect){
         throw new ApiError(400,"Invaalid Old Password!");
     }
 
-    user.password = newPassword;
-    await user.save({validateBeforeSave:false});
+    user.password = String(newPassword);
+    await user.save({validateBeforeSave: false});
 
     return res
             .status(200)
@@ -385,7 +386,7 @@ const getWatchHistory = asyncHandler(async (req,res)=>{
             $lookup:{
                 from:"videos",
                 localField:"watchHistory", // need for change if
-                foreignField:_id,
+                foreignField:"_id",
                 as:"watchHistory",
                 pipeline:[
                     {

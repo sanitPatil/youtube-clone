@@ -56,8 +56,9 @@ userSchema.pre("save", async function(next){ // middleware
 })
 
 // USER METHODS 
-userSchema.methods.isPassowrdCorrect = async function(password){
-    return await bcrypt.compare(password,this.password);
+userSchema.methods.isPasswordCorrect = async function(password){
+     //console.log(password)
+     return await bcrypt.compare(password,this.password);
 }
 
 userSchema.methods.generateAccessToken = function(){ // NO NEED FOR ASYNC AS IT FASTER WORK
