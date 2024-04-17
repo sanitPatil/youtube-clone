@@ -8,8 +8,9 @@ const asyncHandler = (requestHandler)=>{
     )
 }
 
-export {asyncHandler} // HIGHER ORDER FUNCTION WHO TAKES PARAMETER AS FUNCTION AND RETURNS A FUNCTION 
 
+
+export {asyncHandler} // HIGHER ORDER FUNCTION WHO TAKES PARAMETER AS FUNCTION AND RETURNS A FUNCTION 
 /* USING TRY AND CATCH */
 // const asyncHandler = (fn)=>async (req,res,next)=>{
 //     try{
