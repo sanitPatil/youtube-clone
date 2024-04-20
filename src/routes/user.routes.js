@@ -31,16 +31,25 @@ router.route('/register').post(
 router.route('/login').post(loginUser)
 
 // secure section 
-router.route('/logout').post(verifyJWT,logoutUser) // BEACUASE verifyJWT returns user so it will available in next function
+// router.route('/logout').post(verifyJWT,logoutUser) // BEACUASE verifyJWT returns user so it will available in next function
+// router.route('/refresh-token').post(refreshAccessToken)
+// router.route('/change-password').post(verifyJWT,changedPassword)
+// router.route('/current-user').get(verifyJWT,getCurentUser)
+// router.route('/update-account').patch(verifyJWT,upldateAccountDetails)
+// router.route('/avatar').patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
+// router.route('/cover-image').patch(verifyJWT,upload.single("coverImage"),updateUserCoverImage)
+// router.route('/c/:username').get(verifyJWT,getUserChannelProfile)
+// router.route('/history').get(verifyJWT,getWatchHistory)
+
+application.use(verifyJWT);
+router.route('/logout').post(logoutUser);
 router.route('/refresh-token').post(refreshAccessToken)
-router.route('/change-password').post(verifyJWT,changedPassword)
-router.route('/current-user').get(verifyJWT,getCurentUser)
-router.route('/update-account').patch(verifyJWT,upldateAccountDetails)
-router.route('/avatar').patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
-router.route('/cover-image').patch(verifyJWT,upload.single("coverImage"),updateUserCoverImage)
-router.route('/c/:username').get(verifyJWT,getUserChannelProfile)
-router.route('/history').get(verifyJWT,getWatchHistory)
-
-
+router.route('/change-password').post(changedPassword)
+router.route('/current-user').get(getCurentUser)
+router.route('/update-account').patch(upldateAccountDetails)
+router.route('/avatar').patch(upload.single("avatar"), updateUserAvatar)
+router.route('/cover-image').patch(upload.single("coverImage"),updateUserCoverImage)
+router.route('/c/:username').get(getUserChannelProfile)
+router.route('/history').get(getWatchHistory)
 
 export default router;

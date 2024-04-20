@@ -48,6 +48,8 @@ const registerUser = asyncHandler(async (req,res)=>{
         throw new ApiError(400,"Avatar file is required!!!");
     }
 
+    // refresh token save 
+    
     const avatar = await uploadOnCloudinary(avatarLocalPath);
     const coverImage = await uploadOnCloudinary(coverImagePath);
 
@@ -61,15 +63,17 @@ const registerUser = asyncHandler(async (req,res)=>{
         coverImage:coverImage.url,
         email,
         password,
-        userName:userName.toLowerCase()
+        userName:userName.toLowerCase(),
+        
     });
+    
 
     const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
     if(!createdUser){
         throw new ApiError(500,"something went wrong while registering user");
     }
-
+   
     return res.status(201).json(new ApiResponse(200,createdUser, "user created successfully."))
 })
 
@@ -96,7 +100,7 @@ const loginUser = asyncHandler(async (req,res)=>{
         throw new ApiError(404,"user does not exists!!!");
     }
 
-    const isPassowrdValid = await user.isPassowrdCorrect(password);
+    const isPassowrdValid = await user.isPasswordCorrect(password);
 
     if(!isPassowrdValid){
         throw new ApiError(401,"Password is invalid!!!");
@@ -154,18 +158,18 @@ const logoutUser = asyncHandler(async (req,res)=>{
 const refreshAccessToken = asyncHandler(async (req,res)=>{
     try {
         const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    
+        //console.log(incomingRefreshToken);
         if(!incomingRefreshToken){
             throw new ApiError(401,"Unauthorized request")
         }
     
-        const decodedToken = await jwt.verify(
+        const decodedToken = jwt.verify(
             incomingRefreshToken,
-            process.env.REFRESH_TOKEN_SECRET
+            process.env.REFRESH_TOKEN_SECRET,
         )
-    
+        console.log(decodedToken);
         const user = await User.findById(decodedToken?._id);
-            
+        //console.log(user);
         if(!user){
             throw new ApiError(401,"invalid request")
         }
@@ -179,7 +183,7 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
             httpOnly:true,
             secure:true
         }
-    
+       // console.log(accessToken,"||",newRefreshToken);
         return res
         .status(200)
         .cookie("accessToken",accessToken,options)
@@ -188,7 +192,7 @@ const refreshAccessToken = asyncHandler(async (req,res)=>{
             new ApiResponse(200,{accessToken,refreshToken:newRefreshToken},"accesstoken refreshed...")
         )
     } catch (error) {
-        throw new ApiError(401,error?.mesage|| "invalid refresh token")
+        throw new ApiError(400,error?.mesage|| "Invalid refresh token")
     }
 })
 

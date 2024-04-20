@@ -55,6 +55,13 @@ userSchema.pre("save", async function(next){ // middleware
     next();
 })
 
+// refresh token save
+userSchema.pre("save", async function(next){
+    if(!this.isModified("refreshToken")) next();
+    this.refreshToken = this.generateRefreshToken();
+    next();
+})
+
 // USER METHODS 
 userSchema.methods.isPasswordCorrect = async function(password){
      //console.log(password)
